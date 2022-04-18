@@ -2,7 +2,7 @@
 
 PoC for a Svelte SDK for [Unleash](https://www.getunleash.io/) based on the official [proxy-client-react](https://github.com/Unleash/proxy-client-react).
 
-Check out a demo here: [proxy-client-svelte](https://github.com/nunogois/proxy-client-svelte).
+The demo is part of this repo and is currently hosted on Vercel: https://proxy-client-svelte.vercel.app/
 
 # DISCLAIMER:
 
