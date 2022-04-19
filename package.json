@@ -1,6 +1,6 @@
 {
 	"name": "@nunogois/proxy-client-svelte",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"description": "Svelte interface for working with Unleash",
 	"scripts": {
 		"dev": "svelte-kit dev",
