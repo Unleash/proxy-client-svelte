@@ -122,7 +122,7 @@ To check if a feature is enabled:
 	const enabled = useFlag('travel.landing');
 </script>
 
-{#if enabled}
+{#if $enabled}
 <SomeComponent />
 {:else}
 <AnotherComponent />
@@ -140,9 +140,9 @@ To check variants:
 	const variant = useVariant('travel.landing');
 </script>
 
-{#if variant.enabled && variant.name === 'SomeComponent'}
+{#if $variant.enabled && $variant.name === 'SomeComponent'}
 <SomeComponent />
-{:else if variant.enabled && variant.name === 'AnotherComponent'}
+{:else if $variant.enabled && $variant.name === 'AnotherComponent'}
 <AnotherComponent />
 {:else}
 <DefaultComponent />
@@ -160,7 +160,7 @@ Follow the following steps in order to delay rendering until the flags have been
 	const { flagsReady, flagsError } = useFlagsStatus();
 </script>
 
-{#if !flagsReady}
+{#if !$flagsReady}
 <Loading />
 {:else}
 <MyComponent error="{flagsError}" />
