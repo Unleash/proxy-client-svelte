@@ -9,7 +9,7 @@
 
 	export let config: IConfig = undefined;
 	export let unleashClient: UnleashClient = undefined;
-	export let startClient = false;
+	export let startClient = true;
 
 	let client = writable<UnleashClient | undefined>(unleashClient);
 	let flagsReady = writable(false);
