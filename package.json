@@ -1,13 +1,16 @@
 {
-	"name": "@nunogois/proxy-client-svelte",
+	"name": "@unleash/proxy-client-svelte",
 	"version": "0.0.4",
 	"description": "Svelte interface for working with Unleash",
+	"files": [
+		"package"
+	],
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
 		"package": "svelte-kit package",
 		"preview": "svelte-kit preview",
-		"prepare": "svelte-kit sync",
+		"prepare": "yarn build && yarn package",
 		"check": "svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --ignore-path .gitignore --check --plugin-search-dir=. . && eslint --ignore-path .gitignore .",
@@ -32,6 +35,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"unleash-proxy-client": "2.0.0-beta.0"
+		"unleash-proxy-client": "2.0.1"
 	}
 }

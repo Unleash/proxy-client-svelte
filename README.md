@@ -11,9 +11,9 @@ This library is meant to be used with the [unleash-proxy](https://github.com/Unl
 # Installation
 
 ```bash
-npm install @nunogois/proxy-client-svelte
+npm install @unleash/proxy-client-svelte
 // or
-yarn add @nunogois/proxy-client-svelte
+yarn add @unleash/proxy-client-svelte
 ```
 
 # Initialization
@@ -25,7 +25,7 @@ Import the provider like this in your entrypoint file (typically index.svelte):
 	let FlagProvider;
 
 	onMount(async () => {
-		const proxyClientSvelte = await import('@nunogois/proxy-client-svelte');
+		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
 		FlagProvider = proxyClientSvelte.default;
 	});
 
@@ -47,12 +47,12 @@ Alternatively, you can pass your own client in to the FlagProvider:
 
 ```html
 <script lang="ts">
-	import { UnleashClient } from '@nunogois/proxy-client-svelte';
+	import { UnleashClient } from '@unleash/proxy-client-svelte';
 
 	let FlagProvider;
 
 	onMount(async () => {
-		const proxyClientSvelte = await import('@nunogois/proxy-client-svelte');
+		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
 		FlagProvider = proxyClientSvelte.default;
 	});
 
@@ -117,7 +117,7 @@ To check if a feature is enabled:
 
 ```html
 <script lang="ts">
-	import { useFlag } from '@nunogois/proxy-client-svelte';
+	import { useFlag } from '@unleash/proxy-client-svelte';
 
 	const enabled = useFlag('travel.landing');
 </script>
@@ -135,7 +135,7 @@ To check variants:
 
 ```html
 <script lang="ts">
-	import { useVariant } from '@nunogois/proxy-client-svelte';
+	import { useVariant } from '@unleash/proxy-client-svelte';
 
 	const variant = useVariant('travel.landing');
 </script>
@@ -156,7 +156,7 @@ Follow the following steps in order to delay rendering until the flags have been
 
 ```html
 <script lang="ts">
-	import { useFlagsStatus } from '@nunogois/proxy-client-svelte';
+	import { useFlagsStatus } from '@unleash/proxy-client-svelte';
 	const { flagsReady, flagsError } = useFlagsStatus();
 </script>
 
@@ -173,7 +173,7 @@ Follow the following steps in order to update the unleash context:
 
 ```html
 <script lang="ts">
-	import { useUnleashContext, useFlag } from '@nunogois/proxy-client-svelte';
+	import { useUnleashContext, useFlag } from '@unleash/proxy-client-svelte';
 
 	export let userId: string = undefined;
 
