@@ -24,7 +24,7 @@ Import the provider like this in your entrypoint file (typically index.svelte):
 
 	onMount(async () => {
 		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
-		FlagProvider = proxyClientSvelte.default;
+		({ FlagProvider } = proxyClientSvelte);
 	});
 
 	const config = {
@@ -51,7 +51,7 @@ Alternatively, you can pass your own client in to the FlagProvider:
 
 	onMount(async () => {
 		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
-		FlagProvider = proxyClientSvelte.default;
+		({ FlagProvider } = proxyClientSvelte);
 	});
 
 	const config = {
