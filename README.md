@@ -18,13 +18,13 @@ yarn add @unleash/proxy-client-svelte
 
 Import the provider like this in your entrypoint file (typically index.svelte):
 
-```html
+```jsx
 <script lang="ts">
 	let FlagProvider;
 
 	onMount(async () => {
 		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
-		FlagProvider = proxyClientSvelte.default;
+		({ FlagProvider } = proxyClientSvelte);
 	});
 
 	const config = {
@@ -36,14 +36,14 @@ Import the provider like this in your entrypoint file (typically index.svelte):
 	};
 </script>
 
-<svelte:component this="{FlagProvider}" {config}>
+<svelte:component this={FlagProvider} {config}>
 	<App />
 </svelte:component>
 ```
 
 Alternatively, you can pass your own client in to the FlagProvider:
 
-```html
+```jsx
 <script lang="ts">
 	import { UnleashClient } from '@unleash/proxy-client-svelte';
 
@@ -51,7 +51,7 @@ Alternatively, you can pass your own client in to the FlagProvider:
 
 	onMount(async () => {
 		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
-		FlagProvider = proxyClientSvelte.default;
+		({ FlagProvider } = proxyClientSvelte);
 	});
 
 	const config = {
@@ -65,7 +65,7 @@ Alternatively, you can pass your own client in to the FlagProvider:
 	const client = new UnleashClient(config);
 </script>
 
-<svelte:component this="{FlagProvider}" unleashClient="{client}">
+<svelte:component this={FlagProvider} unleashClient={client}>
 	<App />
 </svelte:component>
 ```
@@ -77,8 +77,8 @@ By default, the Unleash client will start polling the Proxy for toggles immediat
 - setting the `startClient` prop to `false`
 - passing a client instance to the `FlagProvider`
 
-```html
-<svelte:component this="{FlagProvider}" unleashClient="{client}" startClient="{false}">
+```jsx
+<svelte:component this={FlagProvider} unleashClient={client} startClient={false}>
 	<App />
 </svelte:component>
 ```
@@ -87,7 +87,7 @@ Deferring the client start gives you more fine-grained control over when to star
 
 To start the client, use the client's `start` method. The below snippet of pseudocode will defer polling until the end of the `asyncProcess` function.
 
-```html
+```jsx
 <script lang="ts">
 	const client = new UnleashClient({
 		/* ... */
@@ -102,7 +102,7 @@ To start the client, use the client's `start` method. The below snippet of pseud
 	});
 </script>
 
-<svelte:component this="{FlagProvider}" unleashClient="{client}" startClient="{false}">
+<svelte:component this={FlagProvider} unleashClient={client} startClient={false}>
 	<App />
 </svelte:component>
 ```
@@ -113,7 +113,7 @@ To start the client, use the client's `start` method. The below snippet of pseud
 
 To check if a feature is enabled:
 
-```html
+```jsx
 <script lang="ts">
 	import { useFlag } from '@unleash/proxy-client-svelte';
 
@@ -131,7 +131,7 @@ To check if a feature is enabled:
 
 To check variants:
 
-```html
+```jsx
 <script lang="ts">
 	import { useVariant } from '@unleash/proxy-client-svelte';
 
@@ -152,7 +152,7 @@ To check variants:
 useFlagsStatus retrieves the ready state and error events.
 Follow the following steps in order to delay rendering until the flags have been fetched.
 
-```html
+```jsx
 <script lang="ts">
 	import { useFlagsStatus } from '@unleash/proxy-client-svelte';
 	const { flagsReady, flagsError } = useFlagsStatus();
@@ -161,7 +161,7 @@ Follow the following steps in order to delay rendering until the flags have been
 {#if !$flagsReady}
 <Loading />
 {:else}
-<MyComponent error="{flagsError}" />
+<MyComponent error={flagsError} />
 {/if}
 ```
 
@@ -169,7 +169,7 @@ Follow the following steps in order to delay rendering until the flags have been
 
 Follow the following steps in order to update the unleash context:
 
-```html
+```jsx
 <script lang="ts">
 	import { useUnleashContext, useFlag } from '@unleash/proxy-client-svelte';
 

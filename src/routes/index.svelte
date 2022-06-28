@@ -6,7 +6,7 @@
 
 	onMount(async () => {
 		const proxyClientSvelte = await import('$lib');
-		FlagProvider = proxyClientSvelte.default;
+		({ FlagProvider } = proxyClientSvelte);
 	});
 
 	const config = {
