@@ -1,6 +1,6 @@
 {
 	"name": "@unleash/proxy-client-svelte",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Svelte interface for working with Unleash",
 	"files": [
 		"package"
@@ -35,6 +35,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"unleash-proxy-client": "2.0.1"
+		"unleash-proxy-client": "^2.0.3"
 	}
 }
