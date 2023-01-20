@@ -28,11 +28,10 @@ Import the provider like this in your entrypoint file (typically index.svelte):
 	});
 
 	const config = {
-		url: 'https://HOSTNAME/proxy',
-		clientKey: 'PROXYKEY',
+		url: 'https://UNLEASH-INSTANCE/api/frontend',
+		clientKey: 'CLIENT—SIDE—API—TOKEN',
 		refreshInterval: 15,
 		appName: 'your-app-name',
-		environment: 'dev'
 	};
 </script>
 
@@ -55,11 +54,10 @@ Alternatively, you can pass your own client in to the FlagProvider:
 	});
 
 	const config = {
-		url: 'https://HOSTNAME/proxy',
-		clientKey: 'PROXYKEY',
+		url: 'https://UNLEASH-INSTANCE/api/frontend',
+		clientKey: 'CLIENT—SIDE—API—TOKEN',
 		refreshInterval: 15,
 		appName: 'your-app-name',
-		environment: 'dev'
 	};
 
 	const client = new UnleashClient(config);
