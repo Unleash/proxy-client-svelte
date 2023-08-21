@@ -1,8 +1,8 @@
 import { getContext } from 'svelte';
-import { ContextStateSymbol } from './context';
+import { ContextStateSymbol, type TContext } from './context';
 
 const useFlagsStatus = () => {
-	const { flagsReady, flagsError } = getContext(ContextStateSymbol);
+	const { flagsReady, flagsError } = getContext<TContext>(ContextStateSymbol);
 
 	return { flagsReady, flagsError };
 };

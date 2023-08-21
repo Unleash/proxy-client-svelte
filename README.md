@@ -1,117 +1,48 @@
-# proxy-client-svelte
-
-PoC for a Svelte SDK for [Unleash](https://www.getunleash.io/) based on the official [proxy-client-react](https://github.com/Unleash/proxy-client-react).
-
-# DISCLAIMER:
-
-This library is meant to be used with the [unleash-proxy](https://github.com/Unleash/unleash-proxy). The proxy application layer will sit between your unleash instance and your client applications, and provides performance and security benefits. DO NOT TRY to connect this library directly to the unleash instance, as the datasets follow different formats because the proxy only returns evaluated toggle information.
-
 # Installation
 
 ```bash
 npm install @unleash/proxy-client-svelte
-// or
+# or
 yarn add @unleash/proxy-client-svelte
 ```
 
-# Initialization
+# How to use
+
+## Initialize the client
+
+Prepare [Unleash Proxy](https://docs.getunleash.io/reference/unleash-proxy) secret
+or [Frontend API Access](https://docs.getunleash.io/reference/front-end-api) token.
 
 Import the provider like this in your entrypoint file (typically index.svelte):
 
-```jsx
+```svelte
 <script lang="ts">
-	let FlagProvider;
-
-	onMount(async () => {
-		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
-		({ FlagProvider } = proxyClientSvelte);
-	});
+	import { FlagProvider } from '@unleash/proxy-client-svelte';
 
 	const config = {
-		url: 'https://UNLEASH-INSTANCE/api/frontend',
-		clientKey: 'CLIENT—SIDE—API—TOKEN',
-		refreshInterval: 15,
-		appName: 'your-app-name',
+		url: '<unleash-url>/api/frontend', // Your front-end API URL or the Unleash proxy's URL (https://<proxy-url>/proxy)
+		clientKey: '<your-token>', // A client-side API token OR one of your proxy's designated client keys (previously known as proxy secrets)
+		refreshInterval: 15, // How often (in seconds) the client should poll the proxy for updates
+		appName: 'your-app-name' // The name of your application. It's only used for identifying your application
 	};
 </script>
 
-<svelte:component this={FlagProvider} {config}>
+<FlagProvider {config}>
 	<App />
-</svelte:component>
+</FlagProvider>
 ```
 
-Alternatively, you can pass your own client in to the FlagProvider:
+### Connection options
 
-```jsx
-<script lang="ts">
-	import { UnleashClient } from '@unleash/proxy-client-svelte';
+To connect this SDK to your Unleash instance's [front-end API](https://docs.getunleash.io/reference/front-end-api), use the URL to your Unleash instance's front-end API (`<unleash-url>/api/frontend`) as the `url` parameter. For the `clientKey` parameter, use a `FRONTEND` token generated from your Unleash instance. Refer to the [_how to create API tokens_](https://docs.getunleash.io/how-to/how-to-create-api-tokens) guide for the necessary steps.
 
-	let FlagProvider;
-
-	onMount(async () => {
-		const proxyClientSvelte = await import('@unleash/proxy-client-svelte');
-		({ FlagProvider } = proxyClientSvelte);
-	});
-
-	const config = {
-		url: 'https://UNLEASH-INSTANCE/api/frontend',
-		clientKey: 'CLIENT—SIDE—API—TOKEN',
-		refreshInterval: 15,
-		appName: 'your-app-name',
-	};
-
-	const client = new UnleashClient(config);
-</script>
-
-<svelte:component this={FlagProvider} unleashClient={client}>
-	<App />
-</svelte:component>
-```
-
-## Deferring client start
-
-By default, the Unleash client will start polling the Proxy for toggles immediately when the `FlagProvider` component renders. You can delay the polling by:
-
-- setting the `startClient` prop to `false`
-- passing a client instance to the `FlagProvider`
-
-```jsx
-<svelte:component this={FlagProvider} unleashClient={client} startClient={false}>
-	<App />
-</svelte:component>
-```
-
-Deferring the client start gives you more fine-grained control over when to start fetching the feature toggle configuration. This could be handy in cases where you need to get some other context data from the server before fetching toggles, for instance.
-
-To start the client, use the client's `start` method. The below snippet of pseudocode will defer polling until the end of the `asyncProcess` function.
-
-```jsx
-<script lang="ts">
-	const client = new UnleashClient({
-		/* ... */
-	});
-
-	onMount(() => {
-		const asyncProcess = async () => {
-			// do async work ...
-			client.start();
-		};
-		asyncProcess();
-	});
-</script>
-
-<svelte:component this={FlagProvider} unleashClient={client} startClient={false}>
-	<App />
-</svelte:component>
-```
-
-# Usage
+To connect this SDK to the [Unleash proxy](https://docs.getunleash.io/reference/unleash-proxy), use the proxy's URL and a [proxy client key](https://docs.getunleash.io/reference/api-tokens-and-client-keys#proxy-client-keys). The [_configuration_ section of the Unleash proxy docs](https://docs.getunleash.io/reference/unleash-proxy#configuration) contains more info on how to configure client keys for your proxy.
 
 ## Check feature toggle status
 
 To check if a feature is enabled:
 
-```jsx
+```svelte
 <script lang="ts">
 	import { useFlag } from '@unleash/proxy-client-svelte';
 
@@ -119,9 +50,9 @@ To check if a feature is enabled:
 </script>
 
 {#if $enabled}
-<SomeComponent />
+	<SomeComponent />
 {:else}
-<AnotherComponent />
+	<AnotherComponent />
 {/if}
 ```
 
@@ -129,19 +60,19 @@ To check if a feature is enabled:
 
 To check variants:
 
-```jsx
+```svelte
 <script lang="ts">
 	import { useVariant } from '@unleash/proxy-client-svelte';
 
 	const variant = useVariant('travel.landing');
 </script>
 
-{#if $variant.enabled && $variant.name === 'SomeComponent'}
-<SomeComponent />
-{:else if $variant.enabled && $variant.name === 'AnotherComponent'}
-<AnotherComponent />
+{#if variant.enabled && variant.name === 'SomeComponent'}
+	<SomeComponent />
+{:else if variant.enabled && variant.name === 'AnotherComponent'}
+	<AnotherComponent />
 {:else}
-<DefaultComponent />
+	<DefaultComponent />
 {/if}
 ```
 
@@ -150,41 +81,100 @@ To check variants:
 useFlagsStatus retrieves the ready state and error events.
 Follow the following steps in order to delay rendering until the flags have been fetched.
 
-```jsx
+```svelte
 <script lang="ts">
 	import { useFlagsStatus } from '@unleash/proxy-client-svelte';
+
 	const { flagsReady, flagsError } = useFlagsStatus();
 </script>
 
 {#if !$flagsReady}
-<Loading />
+	<Loading />
 {:else}
-<MyComponent error={flagsError} />
+	<MyComponent error={flagsError} />
 {/if}
 ```
 
 ## Updating context
 
-Follow the following steps in order to update the unleash context:
+Initial context can be specified on a `FlagProvider` `config.context` property.
 
-```jsx
+`<FlagProvider config={{ ...config, context: { userId: 123 }}>`
+
+This code sample shows you how to update the unleash context dynamically:
+
+```svelte
 <script lang="ts">
 	import { useUnleashContext, useFlag } from '@unleash/proxy-client-svelte';
 
-	export let userId: string = undefined;
+	export let userId;
 
+	const toggle = useFlag('my-toggle');
 	const updateContext = useUnleashContext();
 
-	onMount(() => {
+	$: {
+		// context is updated with userId
 		updateContext({ userId });
-	});
+	}
 
+	// OR if you need to perform an action right after new context is applied
 	$: {
 		async function run() {
+			// Can wait for the new flags to pull in from the different context
 			await updateContext({ userId });
 			console.log('new flags loaded for', userId);
 		}
 		run();
 	}
 </script>
+```
+
+# Advanced use cases
+
+## Deferring client start
+
+By default, the Unleash client will start polling the Proxy for toggles immediately when the `FlagProvider` component renders. You can prevent it by setting `startClient` prop to `false`. This is useful when you'd like to for example bootstrap the client and work offline.
+
+Deferring the client start gives you more fine-grained control over when to start fetching the feature toggle configuration. This could be handy in cases where you need to get some other context data from the server before fetching toggles, for instance.
+
+To start the client, use the client's `start` method. The below snippet of pseudocode will defer polling until the end of the `asyncProcess` function.
+
+```svelte
+<script lang="ts">
+	const client = new UnleashClient({
+		/* ... */
+	});
+
+	onMount(async () => {
+		// do async work ...
+		client.start();
+	});
+</script>
+
+<FlagProvider unleashClient={client} startClient={false}>
+	<App />
+</FlagProvider>
+```
+
+## Use unleash client directly
+
+```svelte
+<script lang="ts">
+	import { useUnleashContext, useUnleashClient } from '@unleash/proxy-client-svelte';
+
+	export let userId;
+
+	const client = useUnleashClient();
+
+	const login = () => {
+		// login user
+		if (client.isEnabled('new-onboarding')) {
+			// Send user to new onboarding flow
+		} else {
+			// send user to old onboarding flow
+		}
+	};
+</script>
+
+<LoginForm {login} />
 ```
