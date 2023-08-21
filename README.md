@@ -10,8 +10,13 @@ yarn add @unleash/proxy-client-svelte
 
 ## Initialize the client
 
-Prepare [Unleash Proxy](https://docs.getunleash.io/reference/unleash-proxy) secret
-or [Frontend API Access](https://docs.getunleash.io/reference/front-end-api) token.
+Depending on your needs and specific use-case, prepare one of:
+
+- [Front-end API](https://docs.getunleash.io/reference/front-end-api)
+- [Unleash Edge](https://docs.getunleash.io/reference/unleash-edge)
+- [Unleash Proxy](https://docs.getunleash.io/reference/unleash-proxy)
+
+And a respective frontend token (or, if you're using the Unleash Proxy, one of your proxy's designated client keys, previously known as proxy secrets).
 
 Import the provider like this in your entrypoint file (typically index.svelte):
 
@@ -20,8 +25,8 @@ Import the provider like this in your entrypoint file (typically index.svelte):
 	import { FlagProvider } from '@unleash/proxy-client-svelte';
 
 	const config = {
-		url: '<unleash-url>/api/frontend', // Your front-end API URL or the Unleash proxy's URL (https://<proxy-url>/proxy)
-		clientKey: '<your-token>', // A client-side API token OR one of your proxy's designated client keys (previously known as proxy secrets)
+		url: '<unleash-url>/api/frontend', // Your Front-end API, Unleash Edge or Unleash Proxy URL
+		clientKey: '<your-token>', // Front-end API token (or proxy client key)
 		refreshInterval: 15, // How often (in seconds) the client should poll the proxy for updates
 		appName: 'your-app-name' // The name of your application. It's only used for identifying your application
 	};
@@ -35,6 +40,8 @@ Import the provider like this in your entrypoint file (typically index.svelte):
 ### Connection options
 
 To connect this SDK to your Unleash instance's [front-end API](https://docs.getunleash.io/reference/front-end-api), use the URL to your Unleash instance's front-end API (`<unleash-url>/api/frontend`) as the `url` parameter. For the `clientKey` parameter, use a `FRONTEND` token generated from your Unleash instance. Refer to the [_how to create API tokens_](https://docs.getunleash.io/how-to/how-to-create-api-tokens) guide for the necessary steps.
+
+To connect this SDK to the [Unleash Edge](https://docs.getunleash.io/reference/unleash-edge), use the URL to your Unleash Edge instance as the `url` parameter. For the `clientKey` parameter, use a `FRONTEND` token generated from your Unleash Edge instance. Refer to the [_how to create API tokens_](https://docs.getunleash.io/how-to/how-to-create-api-tokens) guide for the necessary steps. Ensure that your Unleash Edge instance is correctly configured to have access to the feature toggles your `FRONTEND` token is requesting.
 
 To connect this SDK to the [Unleash proxy](https://docs.getunleash.io/reference/unleash-proxy), use the proxy's URL and a [proxy client key](https://docs.getunleash.io/reference/api-tokens-and-client-keys#proxy-client-keys). The [_configuration_ section of the Unleash proxy docs](https://docs.getunleash.io/reference/unleash-proxy#configuration) contains more info on how to configure client keys for your proxy.
 
@@ -133,7 +140,7 @@ This code sample shows you how to update the unleash context dynamically:
 
 ## Deferring client start
 
-By default, the Unleash client will start polling the Proxy for toggles immediately when the `FlagProvider` component renders. You can prevent it by setting `startClient` prop to `false`. This is useful when you'd like to for example bootstrap the client and work offline.
+By default, the Unleash client will start polling for toggles immediately when the `FlagProvider` component renders. You can prevent it by setting `startClient` prop to `false`. This is useful when you'd like to for example bootstrap the client and work offline.
 
 Deferring the client start gives you more fine-grained control over when to start fetching the feature toggle configuration. This could be handy in cases where you need to get some other context data from the server before fetching toggles, for instance.
 
