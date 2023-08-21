@@ -1,11 +1,9 @@
 <script lang="ts">
 	import { setContext, onMount } from 'svelte';
-	import { ContextStateSymbol } from './context';
+	import { ContextStateSymbol, type TContext, type eventArgs } from './context';
 	import { UnleashClient } from 'unleash-proxy-client';
 	import type { IConfig, IContext } from 'unleash-proxy-client';
-	import { writable } from 'svelte/store';
-
-	type eventArgs = [Function, any];
+	import { get, writable } from 'svelte/store';
 
 	export let config: IConfig = undefined;
 	export let unleashClient: UnleashClient = undefined;
@@ -22,32 +20,47 @@
 		);
 	}
 
-	if (!$client && config) {
+	if (!get(client) && config) {
 		client.set(new UnleashClient(config));
 	}
 
-	$client?.on('ready', () => {
+	const currentClient = get(client);
+
+	currentClient?.on('ready', () => {
 		flagsReady.set(true);
 	});
 
-	$client?.on('error', (e: any) => {
+	currentClient?.on('error', (e: any) => {
 		flagsError.set(e);
 	});
 
 	onMount(() => {
+		const currentClient = get(client);
 		const shouldStartClient = startClient || !unleashClient;
-		if (shouldStartClient) $client?.start();
+		if (shouldStartClient) currentClient?.start();
 	});
 
 	const updateContext = async (context: IContext): Promise<void> => {
-		await $client?.updateContext(context);
+		const currentClient = get(client);
+		await currentClient?.updateContext(context);
 	};
 
-	const isEnabled = (name: string) => $client?.isEnabled(name);
-	const getVariant = (name: string) => $client?.getVariant(name);
-	const on = (event: string, ...args: eventArgs) => $client?.on(event, ...args);
+	const isEnabled = (name: string) => {
+		const currentClient = get(client);
+		return currentClient?.isEnabled(name);
+	};
 
-	setContext(ContextStateSymbol, {
+	const getVariant = (name: string) => {
+		const currentClient = get(client);
+		return currentClient?.getVariant(name);
+	};
+
+	const on = (event: string, ...args: eventArgs) => {
+		const currentClient = get(client);
+		return currentClient?.on(event, ...args);
+	};
+
+	setContext<TContext>(ContextStateSymbol, {
 		on,
 		updateContext,
 		isEnabled,

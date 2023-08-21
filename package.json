@@ -5,6 +5,7 @@
 	"files": [
 		"package"
 	],
+	"main": "package/index.js",
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",

@@ -1,23 +1,19 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
 	import HelloWorld from '../components/HelloWorld.svelte';
 
-	let FlagProvider;
+	import '../global.css';
 
-	onMount(async () => {
-		const proxyClientSvelte = await import('$lib');
-		({ FlagProvider } = proxyClientSvelte);
-	});
+	import { FlagProvider } from '$lib';
 
 	const config = {
-		url: 'https://unleash-proxy.nunogois.com/proxy',
-		clientKey: 'ng-unleash-secret',
+		url: 'https://app.unleash-hosted.com/demo/api/frontend',
+		clientKey:
+			'proxy-client-svelte:development.f7d5c2f3633769afea4eadecd6bf46194dccec9c75170930c76ab4f0',
 		refreshInterval: 2,
-		appName: 'unleash-test',
-		environment: 'dev'
+		appName: 'proxy-client-svelte'
 	};
 </script>
 
-<svelte:component this={FlagProvider} {config}>
+<FlagProvider {config}>
 	<HelloWorld />
-</svelte:component>
+</FlagProvider>

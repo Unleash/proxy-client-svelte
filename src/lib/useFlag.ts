@@ -1,23 +1,22 @@
 import { getContext } from 'svelte';
 import { writable, get } from 'svelte/store';
-import { ContextStateSymbol } from './context';
-import type { UnleashClient } from 'unleash-proxy-client';
+import { ContextStateSymbol, type TContext } from './context';
 
 const useFlag = (name: string) => {
-	const { isEnabled, client } = getContext(ContextStateSymbol);
-	const $client = get(client) as UnleashClient;
-	const flag = writable(!!isEnabled(name));
+	const { isEnabled, client } = getContext<TContext>(ContextStateSymbol);
+	const currentClient = get(client);
 
-	$client.on('update', () => {
-		const enabled = isEnabled(name);
-		if (enabled !== flag) {
-			flag.set(!!enabled);
+	const flag = writable(Boolean(isEnabled(name)));
+
+	const updateFlagValue = () => {
+		const enabled = Boolean(isEnabled(name));
+		if (enabled !== get(flag)) {
+			flag.set(enabled);
 		}
-	});
+	};
 
-	$client.on('ready', () => {
-		flag.set(isEnabled(name));
-	});
+	currentClient.on('update', updateFlagValue);
+	currentClient.on('ready', updateFlagValue);
 
 	return flag;
 };

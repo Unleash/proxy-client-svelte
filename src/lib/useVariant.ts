@@ -1,24 +1,24 @@
 import { getContext } from 'svelte';
 import { writable, get } from 'svelte/store';
-import { ContextStateSymbol } from './context';
-import type { UnleashClient } from 'unleash-proxy-client';
+import { ContextStateSymbol, type TContext } from './context';
 
 const useVariant = (name: string) => {
-	const { getVariant, client } = getContext(ContextStateSymbol);
-	const $client = get(client) as UnleashClient;
-	const variant = getVariant(name);
-	const variantStore = writable(variant);
+	const { getVariant, client } = getContext<TContext>(ContextStateSymbol);
+	const currentClient = get(client);
 
-	$client.on('update', () => {
+	const initialVariant = getVariant(name);
+	const variantStore = writable(initialVariant);
+
+	const updateVariantValue = () => {
 		const newVariant = getVariant(name);
-		if (newVariant.name !== variant.name || newVariant.enabled !== variant.enabled) {
+		const currentVariant = get(variantStore);
+		if (newVariant.name !== currentVariant.name || newVariant.enabled !== currentVariant.enabled) {
 			variantStore.set(newVariant);
 		}
-	});
+	};
 
-	$client.on('ready', () => {
-		variantStore.set(getVariant(name));
-	});
+	currentClient.on('update', updateVariantValue);
+	currentClient.on('ready', updateVariantValue);
 
 	return variantStore;
 };

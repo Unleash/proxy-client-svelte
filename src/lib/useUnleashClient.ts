@@ -1,12 +1,11 @@
 import { getContext } from 'svelte';
 import { get } from 'svelte/store';
-import { ContextStateSymbol } from './context';
-import type { UnleashClient } from 'unleash-proxy-client';
+import { ContextStateSymbol, type TContext } from './context';
 
 const useUnleashClient = () => {
-	const { client } = getContext(ContextStateSymbol);
+	const { client } = getContext<TContext>(ContextStateSymbol);
 
-	return get(client) as UnleashClient;
+	return get(client);
 };
 
 export default useUnleashClient;
