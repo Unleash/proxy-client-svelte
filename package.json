@@ -6,6 +6,10 @@
 		"package"
 	],
 	"main": "package/index.js",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Unleash/proxy-client-svelte"
+	},
 	"scripts": {
 		"dev": "svelte-kit dev",
 		"build": "svelte-kit build",
