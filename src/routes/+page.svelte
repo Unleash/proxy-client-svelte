@@ -3,7 +3,7 @@
 
 	import '../global.css';
 
-	import { FlagProvider } from '$lib';
+	import { FlagProvider } from '../lib/index.js';
 
 	const config = {
 		url: 'https://app.unleash-hosted.com/demo/api/frontend',

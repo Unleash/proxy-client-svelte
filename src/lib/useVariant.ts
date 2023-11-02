@@ -1,6 +1,6 @@
 import { getContext } from 'svelte';
 import { writable, get } from 'svelte/store';
-import { ContextStateSymbol, type TContext } from './context';
+import { ContextStateSymbol, type TContext } from './context.js';
 
 const useVariant = (name: string) => {
 	const { getVariant, client } = getContext<TContext>(ContextStateSymbol);
@@ -12,13 +12,13 @@ const useVariant = (name: string) => {
 	const updateVariantValue = () => {
 		const newVariant = getVariant(name);
 		const currentVariant = get(variantStore);
-		if (newVariant.name !== currentVariant.name || newVariant.enabled !== currentVariant.enabled) {
-			variantStore.set(newVariant);
+		if (newVariant?.name !== currentVariant.name || newVariant.enabled !== currentVariant.enabled) {
+			variantStore.set(newVariant!);
 		}
 	};
 
-	currentClient.on('update', updateVariantValue);
-	currentClient.on('ready', updateVariantValue);
+	currentClient?.on('update', updateVariantValue);
+	currentClient?.on('ready', updateVariantValue);
 
 	return variantStore;
 };

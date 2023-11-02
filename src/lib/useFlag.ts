@@ -1,6 +1,6 @@
 import { getContext } from 'svelte';
 import { writable, get } from 'svelte/store';
-import { ContextStateSymbol, type TContext } from './context';
+import { ContextStateSymbol, type TContext } from './context.js';
 
 const useFlag = (name: string) => {
 	const { isEnabled, client } = getContext<TContext>(ContextStateSymbol);
@@ -15,8 +15,8 @@ const useFlag = (name: string) => {
 		}
 	};
 
-	currentClient.on('update', updateFlagValue);
-	currentClient.on('ready', updateFlagValue);
+	currentClient?.on('update', updateFlagValue);
+	currentClient?.on('ready', updateFlagValue);
 
 	return flag;
 };

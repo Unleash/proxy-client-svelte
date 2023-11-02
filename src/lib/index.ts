@@ -8,13 +8,13 @@ export type {
 } from 'unleash-proxy-client';
 export { UnleashClient, LocalStorageProvider, InMemoryStorageProvider } from 'unleash-proxy-client';
 
-import { ContextStateSymbol } from './context';
+import { ContextStateSymbol } from './context.js';
 import FlagProvider from './FlagProvider.svelte';
-import useFlag from './useFlag';
-import useFlagsStatus from './useFlagsStatus';
-import useVariant from './useVariant';
-import useUnleashContext from './useUnleashContext';
-import useUnleashClient from './useUnleashClient';
+import useFlag from './useFlag.js';
+import useFlagsStatus from './useFlagsStatus.js';
+import useVariant from './useVariant.js';
+import useUnleashContext from './useUnleashContext.js';
+import useUnleashClient from './useUnleashClient.js';
 
 export {
 	ContextStateSymbol,
