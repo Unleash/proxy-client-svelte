@@ -1,7 +1,5 @@
 <script lang="ts">
-	import logo from '$assets/svelte.png';
-
-	import { useFlag, useFlagsStatus, useVariant } from '$lib';
+	import { useFlag, useFlagsStatus, useVariant } from '../lib/index.js';
 
 	const enabled = useFlag('svelte-test-feature');
 	const variant = useVariant('svelte-test-feature');
@@ -9,7 +7,6 @@
 </script>
 
 <main>
-	<img src={logo} alt="Svelte Logo" />
 	<h1>proxy-client-svelte</h1>
 
 	{#if !$flagsReady}
@@ -45,11 +42,6 @@
 		text-align: center;
 		padding: 1em;
 		margin: 0 auto;
-	}
-
-	img {
-		height: 16rem;
-		width: 16rem;
 	}
 
 	h1 {

@@ -1,5 +1,5 @@
 import { getContext } from 'svelte';
-import { ContextStateSymbol, type TContext } from './context';
+import { ContextStateSymbol, type TContext } from './context.js';
 
 const useUnleashContext = () => {
 	const { updateContext } = getContext<TContext>(ContextStateSymbol);

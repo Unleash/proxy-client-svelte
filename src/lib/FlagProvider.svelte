@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { setContext, onMount } from 'svelte';
-	import { ContextStateSymbol, type TContext, type eventArgs } from './context';
+	import { ContextStateSymbol, type TContext, type eventArgs } from './context.js';
 	import { UnleashClient } from 'unleash-proxy-client';
 	import type { IConfig, IContext } from 'unleash-proxy-client';
 	import { get, writable } from 'svelte/store';
 
-	export let config: IConfig = undefined;
-	export let unleashClient: UnleashClient = undefined;
+	export let config: IConfig | undefined = undefined;
+	export let unleashClient: UnleashClient | undefined = undefined;
 	export let startClient = true;
 
 	let client = writable<UnleashClient | undefined>(unleashClient);
