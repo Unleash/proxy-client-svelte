@@ -4,6 +4,8 @@
 	const enabled = useFlag('svelte-test-feature');
 	const variant = useVariant('svelte-test-feature');
 	const { flagsReady } = useFlagsStatus();
+
+	$: if ($flagsReady) console.table({ $enabled, $variant });
 </script>
 
 <main>
