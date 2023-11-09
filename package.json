@@ -50,7 +50,7 @@
 		"vite": "^4.4.2"
 	},
 	"dependencies": {
-		"unleash-proxy-client": "^2.5.0"
+		"unleash-proxy-client": "^3.2.0"
 	},
 	"svelte": "./dist/index.js",
 	"types": "./dist/index.d.ts",

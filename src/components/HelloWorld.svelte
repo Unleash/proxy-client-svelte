@@ -4,6 +4,8 @@
 	const enabled = useFlag('svelte-test-feature');
 	const variant = useVariant('svelte-test-feature');
 	const { flagsReady } = useFlagsStatus();
+
+	$: if ($flagsReady) console.table({ $enabled, $variant });
 </script>
 
 <main>
@@ -14,6 +16,7 @@
 	{:else}
 		<p style={`font-size:24px; color: ${$enabled ? 'green' : 'red'}`}>
 			{$enabled ? 'Feature is enabled!' : 'Feature is disabled!'}
+			{$variant.feature_enabled}
 			{#if $variant.enabled}
 				<p>{$variant.name}</p>
 			{/if}

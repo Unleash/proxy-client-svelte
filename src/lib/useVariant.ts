@@ -1,6 +1,18 @@
 import { getContext } from 'svelte';
 import { writable, get } from 'svelte/store';
 import { ContextStateSymbol, type TContext } from './context.js';
+import type { IVariant } from 'unleash-proxy-client';
+
+const variantHasChanged = (oldVariant: IVariant, newVariant?: IVariant): boolean => {
+	const variantsAreEqual =
+		oldVariant.name === newVariant?.name &&
+		oldVariant.enabled === newVariant?.enabled &&
+		oldVariant.feature_enabled === newVariant?.feature_enabled &&
+		oldVariant.payload?.type === newVariant?.payload?.type &&
+		oldVariant.payload?.value === newVariant?.payload?.value;
+
+	return !variantsAreEqual;
+};
 
 const useVariant = (name: string) => {
 	const { getVariant, client } = getContext<TContext>(ContextStateSymbol);
@@ -12,7 +24,7 @@ const useVariant = (name: string) => {
 	const updateVariantValue = () => {
 		const newVariant = getVariant(name);
 		const currentVariant = get(variantStore);
-		if (newVariant?.name !== currentVariant.name || newVariant.enabled !== currentVariant.enabled) {
+		if (variantHasChanged(currentVariant, newVariant)) {
 			variantStore.set(newVariant!);
 		}
 	};
